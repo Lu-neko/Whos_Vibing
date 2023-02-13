@@ -36,6 +36,8 @@ class MovementManager {
         this.direction = directions.DOWN;
     }
 
+    update(){}
+
     movement(){
         switch(this.direction){
             case directions.DOWN:
@@ -80,10 +82,14 @@ class MovementPlayer extends MovementManager {
             "KeyS": 0,
             "KeyW": 0,
             "KeyA": 0,
-            "KeyD": 0
+            "KeyD": 0,
+            "Space": 0
         };
 
         this.timer = 0;
+        this.fire_timer = 0;
+
+
 
         window.addEventListener('keydown', this.keydown.bind(this));
         window.addEventListener('keyup', this.keyup.bind(this));
@@ -114,6 +120,23 @@ class MovementPlayer extends MovementManager {
         let keys = [keyboard.DOWN, keyboard.UP, keyboard.LEFT, keyboard.RIGHT];
 
         this.move = 0;
+
+        if (this.fire_timer) this.fire_timer-=1;
+
+        if (this.keys["Space"] && this.fire_timer == 0){
+            this.fire_timer = 40;
+            shurikens.control.movements.direction = this.direction;
+            shurikens.control.movements.x = this.x;
+            shurikens.control.movements.y = this.y;
+            shurikens.control.active = true;
+
+            socket.send(JSON.stringify({
+                command:4,
+                x:this.x,
+                y:this.y,
+                direction:this.direction
+            }));
+        }
 
         for(let i in keys){
             if (this.keys[keys[i]]){

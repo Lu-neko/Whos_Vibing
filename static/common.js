@@ -1,4 +1,5 @@
 let game;
+let debuff = 0;
 
 class Game {
     constructor(){
@@ -25,7 +26,6 @@ class Game {
     }
 
     init(){
-        while(!this.ready){};
 
         for (let layer of this.layers){
             layer.init();
@@ -38,13 +38,18 @@ class Game {
         if (!this.stopped) window.requestAnimationFrame(this.tick.bind(this));
 
         while (this.timer < elapsed){
-            if (Math.floor((this.timer+1000/40)/500) != Math.floor((this.timer)/500)){
-                lovense_socket.emit("basicapi_send_toy_command_ts", {
-                    command: "Function",
-                    timeSec: 10,
-                    action: "Vibrate:"+Math.max(0, Math.floor(20-Math.pow(Math.pow((position_control.x-position_opponent.x)/10, 2)+Math.pow((position_control.y-position_opponent.y)/10, 2), 0.5))),
-                    apiVer: 1
-                })
+            if (Math.floor((this.timer+1000/40)/1000) != Math.floor((this.timer)/1000)){
+                //console.log(Math.floor(Math.pow(Math.pow((position_control.x-position_opponent.x)/50, 2)+Math.pow((position_control.y-position_opponent.y)/50, 2), 0.5)*100))
+                if (lovense_socket){
+                    let delay = 100+Math.floor(Math.pow(Math.pow((position_control.x-position_opponent.x)/50, 2)+Math.pow((position_control.y-position_opponent.y)/50, 2), 0.5)*100);
+                    lovense_socket.emit("basicapi_send_toy_command_ts", {
+                        command: "Pattern",
+                        rule: "V:1;F:v;S:"+delay+"#",
+                        strength: Math.min(17,debuff)+";"+Math.min(20, 5+debuff),
+                        timeSec: 3,
+                        apiVer: 2
+                    })
+                }
             }
             this.timer += 1000/40;
             if (elapsed-this.timer < 5000) this.canva.clearRect(0, 0, 512, 512);

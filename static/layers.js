@@ -23,60 +23,10 @@ const background = [
     [2,0], [2,1], [2,1], [2,1], [2,1], [2,1], [2,1], [2,1], [2,1], [2,1], [2,1], [2,1], [2,1], [2,1], [2,1], [2,2]
 ]
 
-/*
-Game.load = function () {
-    return [
-        Loader.loadImage('tiles', 'static/Assets/Backgrounds/TilesetFloor.png'),
-        //Loader.loadImage('character', 'SpriteSheet.png')
-    ];
-};
-
-Game.init = function () {
-    this.canva = document.createElement("canvas");
-    this.canva.width = 512;
-    this.canva.height = 512;
-    this.tileAtlas = [Loader.getImage('tiles')];
-    this.characters = new CharactersCanva();
-    this._drawLayer(0);
-    //this.hero = {x: 128, y: 384, image: Loader.getImage('character')};
-};
-
-Game._drawLayer = function (layer) {
-    let context = this.canva.getContext("2d");
-    for (var c = 0; c < map.cols; c++) {
-        for (var r = 0; r < map.rows; r++) {
-            var tile = map.getTile(layer, c, r);
-            if (tile !== 0) { // 0 => empty tile
-
-                context.drawImage(
-                    this.tileAtlas[layer], // image
-                    tile[1] * map.tsize, // source x
-                    tile[0] * map.tsize, // source y
-                    map.tsize, // source width
-                    map.tsize, // source height
-                    c * map.tsize,  // target x
-                    r * map.tsize, // target y
-                    map.tsize, // target width
-                    map.tsize // target height
-                );
-            }
-        }
-    }
-};
-
-Game.render = function (update_map) {
-    // draw map background layer
-    //if (update_map) this._drawLayer(0);
-    // draw game sprites
-    this.characters.update(update_map);
-    //console.log(update_map);
-    if (update_map){
-        this.ctx.drawImage(this.canva, 0, 0)
-        this.ctx.drawImage(this.characters.canva, 0, 0);
-    }
-    // draw map top layer
-    //this._drawLayer(1);
-};*/
+let shurikens = {
+    control: new Shuriken(),
+    opponent: new Shuriken()
+} 
 
 class LayerManager {
     constructor(){
@@ -144,6 +94,9 @@ class CharactersLayer extends LayerManager {
             this.characters.push(character);
             this.promises.push(...character.promises)
         }
+
+        this.promises.push(...shurikens.control.promises)
+        this.promises.push(...shurikens.opponent.promises)
         //document.body.appendChild(this.canva)
     }
 
@@ -151,6 +104,8 @@ class CharactersLayer extends LayerManager {
         for(let i in this.characters){
             this.characters[i].init(i==control, i==opponent);
         }
+        shurikens.control.init(null);
+        shurikens.opponent.init(this.characters[control]);
     }
 
     update(update_map){
@@ -162,6 +117,14 @@ class CharactersLayer extends LayerManager {
         for(let character of this.characters){
             character.update();
             if(update_map) character.draw(context);
+        }
+
+        shurikens.control.update();
+        shurikens.opponent.update();
+
+        if(update_map){
+            shurikens.control.draw(context);
+            shurikens.opponent.draw(context);
         }
     }
 }

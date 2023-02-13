@@ -61,13 +61,15 @@ fetch("https://whos-vibing-server.luneko.repl.co/get_token").then(data=>{return 
             let resData = res ? JSON.parse(res) : {}
             console.log("update_device_info")
             console.log(resData)
+            if (toy_list != []) {
+                lovense_socket.emit("basicapi_send_toy_command_ts", {
+                    command: "Function",
+                    action: "Vibrate:5",
+                    timeSec: 1,
+                    apiVer: 1
+                });
+            }
             toy_list = resData.toyList;
-            lovense_socket.emit("basicapi_send_toy_command_ts", {
-                command: "Function",
-                action: "Vibrate:5",
-                timeSec: 1,
-                apiVer: 1
-            })
         })
 
         lovense_socket.on('basicapi_update_app_status_tc', res => {
@@ -113,7 +115,7 @@ socket.addEventListener("message", function (event) {
                 console.log(time-Date.now())
                 console.log(time)
                 console.log(Date.now())
-                game.timer = performance.now() - (time-Date.now());
+                game.timer = performance.now() - (Date.now()-time);
                 console.log("Timer : "+game.timer)
                 random = new Math.seedrandom(data.seed);
                 start();
@@ -128,6 +130,18 @@ socket.addEventListener("message", function (event) {
         case 3:
             game.stopped = 1;
             message.style.display = "";
+
+            const infos = document.getElementById("infos");
+
+            infos.appendChild(link_button);
+
+            let face = infos.getElementsByTagName("img")[0];
+            if (face) infos.removeChild(face);
+        case 4:
+            shurikens.opponent.movements.direction = data.direction;
+            shurikens.opponent.movements.x = data.x;
+            shurikens.opponent.movements.y = data.y;
+            shurikens.opponent.active = true;
     }
     //console.log('Message', data);
 });

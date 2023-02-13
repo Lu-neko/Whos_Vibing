@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+    <title>Who's Vibing?</title>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="static/favicon.ico">
+    <link rel="stylesheet" href="static/style.css" type="text/css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
+
+    <script defer src="static/client.js"></script>
+    <script defer src="static/common.js"></script>
+    <script defer src="static/movements.js"></script>
+    <script defer src="static/characters.js"></script>
+    <script defer src="static/layers.js"></script>
+</head>
+<body>
+    <div class="flex">
+        <div class="canva">
+            <canvas id="canva" width="512" height="512"></canvas>
+        </div>
+        <div class="flex">
+            <div></div>
+            <div class="panel">
+                <div class="top">
+                    <span>Connect</span>
+                </div>
+                <div class="bottom">
+                    <div id="image"></div>
+                </div>
+            </div>
+            <div></div>
+        </div>
+    </div>
+    <div class="flex">
+        <div id="infos">
+            <p id="message_server">Waiting for server..</p>
+        </div>
+        <div>
+        </div>
+    </div>
+</body>
+</html>

@@ -17,7 +17,7 @@ def index():
     return redirect(url_for('play', number=random.randint(100000, 999999)))
 
 @app.route("/<int:number>")
-def play():
+def play(number):
     return render_template("layers.html")
 
 @app.route("/get_token")
@@ -33,4 +33,4 @@ def get_token():
     response = make_response(jsonify(get_token["data"]))
     return response
 
-app.run("0.0.0.0", 5000)
+app.run("127.0.0.1", 3437)

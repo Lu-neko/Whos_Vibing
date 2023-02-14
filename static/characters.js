@@ -34,6 +34,7 @@ class Character {
 
         this.promises.push(new Promise(function(resolve, reject) {
             this.face.onload = function() {
+                this.face.width *= 2;
                 resolve(this.face);
             }.bind(this);
 
@@ -52,8 +53,6 @@ class Character {
         else this.movements = new MovementAI();
 
         if (is_player){
-            this.face.width *= 2;
-            this.face.id = "face";
             document.getElementById("infos").appendChild(this.face)
         }
     }

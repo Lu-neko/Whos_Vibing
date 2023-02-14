@@ -98,12 +98,14 @@ class MovementPlayer extends MovementManager {
     keydown(event){
         if (Object.keys(this.keys).includes(event.code)){
             this.keys[event.code] = 1;
+            event.preventDefault();
         }
     }
 
     keyup(event){
         if (Object.keys(this.keys).includes(event.code)){
             this.keys[event.code] = 0;
+            event.preventDefault();
         }
     }
 

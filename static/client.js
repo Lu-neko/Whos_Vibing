@@ -8,7 +8,7 @@ link_button.onclick = ()=>{
     navigator.clipboard.writeText(window.location.href);
 };
 
-let socket = new WebSocket("wss://whos-vibing-websocket.luneko.repl.co/" + id);
+let socket = new WebSocket("wss://websocket.valentine.luneko.dev/" + id);
 let lovense_socket;
 
 let basicSdkInstance;
@@ -26,7 +26,7 @@ let position_opponent = {
 
 let qr_code;
 
-fetch("https://whos-vibing-server.luneko.repl.co/get_token").then(data=>{return data.json()}).then(res=>{
+fetch("https://valentine.luneko.dev/get_token").then(data=>{return data.json()}).then(res=>{
     console.log(res);
     fetch(
         "https://api.lovense.com/api/basicApi/getSocketUrl",
